@@ -1,0 +1,29 @@
+/* Define a fonte para todo o documento */
+body {
+  font-family: 'Kalam', sans-serif;
+  background-color: #d1d6e3; /* Um fundo claro e suave */
+}
+
+/* Personaliza o cabeçalho */
+h1 {
+  color: #152bed; /* A cor do tema */
+  margin-bottom: 1.5rem;
+}
+
+/* Altera os botões primários */
+.btn-primary {
+  background-color: #3367D6;
+  border-color: #3367D6;
+  font-weight: bold;
+}
+
+/* Personaliza os inputs e selects */
+.form-control, .form-select {
+  border-radius: 0.25rem;
+  border: 1px solid #ced4da;
+}
+
+/* Adiciona um pouco de espaçamento às seções do formulário */
+.mb-3 {
+  margin-bottom: 1.5rem !important;
+}

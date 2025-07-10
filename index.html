@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#3367D6" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icon-180.png" />
+    <title>Resumo de Visita</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Custom CSS -->
+    <link href="custom.css" rel="stylesheet" />
+  </head>
+  <body class="container py-4">
+    <h1 class="mb-4">Resumo de Visita</h1>
+    <form id="agendamentoForm">
+      <!-- Cliente -->
+      <div class="mb-3">
+        <label for="cliente" class="form-label">Cliente</label>
+        <input
+          type="text"
+          id="cliente"
+          class="form-control"
+          placeholder="Cliente"
+        />
+      </div>
+      <!-- Pessoa de Contacto -->
+      <div class="mb-3">
+        <label for="contacto" class="form-label">Pessoa de Contacto</label>
+        <input
+          type="text"
+          id="contacto"
+          class="form-control"
+          placeholder="Pessoa de Contacto"
+        />
+      </div>
+      <!-- Perfil de Cliente -->
+      <div class="mb-3">
+        <label for="tipocliente" class="form-label">Perfil de Cliente</label>
+        <select
+          id="tipocliente"
+          class="form-select"
+          onchange="verificarPerfil()"
+        >
+          <option value="">Seleciona uma opção</option>
+          <option value="CAMV">CAMV</option>
+          <option value="PetShop">PetShop</option>
+          <option value="Agro">Agro</option>
+          <option value="Paw Spot">Paw Spot</option>
+          <option value="Consumidor Final">Consumidor Final</option>
+          <option value="Farmacia">Farmácia</option>
+          <option value="Criador">Criador</option>
+          <option value="Groom">Banhos e Tosquias</option>
+          <option value="Canil">Canil</option>
+          <option value="Hotel">Hotel</option>
+        </select>
+      </div>
+      <!-- Container para Licença DGAV -->
+      <div id="licencaContainer" class="mb-3" style="display: none">
+        <label for="licenca" class="form-label">Licença DGAV MVNSRM?</label>
+        <select id="licenca" class="form-select" onchange="verificarLicenca()">
+          <option value="">Seleciona</option>
+          <option value="sim">Sim</option>
+          <option value="nao">Não</option>
+        </select>
+        <input
+          type="text"
+          id="textoLicenca"
+          class="form-control mt-2"
+          placeholder="Detalhes da licença"
+          style="display: none"
+        />
+      </div>
+      <!-- Fornecedores (Checkboxes) -->
+      <div class="mb-3">
+        <label class="form-label">Fornecedores:</label>
+        <div id="fornecedorCheckboxContainer" class="form-check">
+          <input
+            type="checkbox"
+            id="fornecedorPropec"
+            name="fornecedor"
+            value="Propec"
+            class="form-check-input"
+          />
+          <label for="fornecedorPropec" class="form-check-label">Propec</label><br />
+          <input
+            type="checkbox"
+            id="fornecedorBio2"
+            name="fornecedor"
+            value="Bio2"
+            class="form-check-input"
+          />
+          <label for="fornecedorBio2" class="form-check-label">Bio2</label><br />
+          <input
+            type="checkbox"
+            id="fornecedorAviourem"
+            name="fornecedor"
+            value="AviOurém"
+            class="form-check-input"
+          />
+          <label for="fornecedorAviourem" class="form-check-label">AviOurém</label><br />
+          <input
+            type="checkbox"
+            id="fornecedorFarmina"
+            name="fornecedor"
+            value="Farmina"
+            class="form-check-input"
+          />
+          <label for="fornecedorFarmina" class="form-check-label">Farmina</label><br />
+          <input
+            type="checkbox"
+            id="fornecedorSiloal"
+            name="fornecedor"
+            value="Siloal"
+            class="form-check-input"
+          />
+          <label for="fornecedorSiloal" class="form-check-label">Siloal</label><br />
+          <input
+            type="checkbox"
+            id="fornecedorNovavet"
+            name="fornecedor"
+            value="Novavet"
+            class="form-check-input"
+          />
+          <label for="fornecedorNovavet" class="form-check-label">Novavet</label><br />
+          <input
+            type="checkbox"
+            id="fornecedorCodivet"
+            name="fornecedor"
+            value="Codivet"
+            class="form-check-input"
+          />
+          <label for="fornecedorCodivet" class="form-check-label">Codivet</label><br />
+          <input
+            type="checkbox"
+            id="fornecedorOutros"
+            name="fornecedor"
+            value="outros"
+            class="form-check-input"
+            onchange="verificarFornecedoresCheckbox()"
+          />
+          <label for="fornecedorOutros" class="form-check-label">Outros</label>
+        </div>
+        <div id="fornecedoresOutrosContainer" class="mt-2" style="display: none">
+          <input
+            type="text"
+            id="fornecedoresOutrosDetalhes"
+            class="form-control"
+            placeholder="Especifica outros fornecedores"
+          />
+        </div>
+      </div>
+      <!-- Marcas Atuais (Checkboxes) -->
+      <div class="mb-3">
+        <label class="form-label">Marcas atuais:</label>
+        <div id="marcasCheckboxContainer" class="form-check">
+          <input
+            type="checkbox"
+            id="marcaAdvance"
+            name="marcas"
+            value="Advance"
+            class="form-check-input"
+          />
+          <label for="marcaAdvance" class="form-check-label">Advance</label><br />
+          <input
+            type="checkbox"
+            id="marcaSpecific"
+            name="marcas"
+            value="Specific"
+            class="form-check-input"
+          />
+          <label for="marcaSpecific" class="form-check-label">Specific</label><br />
+          <input
+            type="checkbox"
+            id="marcaRoyalCanin"
+            name="marcas"
+            value="Royal Canin"
+            class="form-check-input"
+          />
+          <label for="marcaRoyalCanin" class="form-check-label">Royal Canin</label><br />
+          <input
+            type="checkbox"
+            id="marcaVirbac"
+            name="marcas"
+            value="Virbac"
+            class="form-check-input"
+          />
+          <label for="marcaVirbac" class="form-check-label">Virbac</label><br />
+          <input
+            type="checkbox"
+            id="marcaHills"
+            name="marcas"
+            value="Hill's"
+            class="form-check-input"
+          />
+          <label for="marcaHills" class="form-check-label">Hill's</label><br />
+          <input
+            type="checkbox"
+            id="marcaOwnat"
+            name="marcas"
+            value="Ownat"
+            class="form-check-input"
+          />
+          <label for="marcaOwnat" class="form-check-label">Ownat</label><br />
+          <input
+            type="checkbox"
+            id="marcaTasteOfTheWild"
+            name="marcas"
+            value="Taste of the Wild"
+            class="form-check-input"
+          />
+          <label for="marcaTasteOfTheWild" class="form-check-label">Taste of the Wild</label><br />
+          <input
+            type="checkbox"
+            id="marcaSchesir"
+            name="marcas"
+            value="Schesir"
+            class="form-check-input"
+          />
+          <label for="marcaSchesir" class="form-check-label">Schesir</label><br />
+          <input
+            type="checkbox"
+            id="marcanatures"
+            name="marcas"
+            value="natures"
+            class="form-check-input"
+          />
+          <label for="marcanatures" class="form-check-label">Nature's Variety</label><br />
+          <input
+            type="checkbox"
+            id="marcaLibra"
+            name="marcas"
+            value="Libra"
+            class="form-check-input"
+          />
+          <label for="marcaLibra" class="form-check-label">Libra</label><br />
+          <input
+            type="checkbox"
+            id="marcaTrovet"
+            name="marcas"
+            value="Trovet"
+            class="form-check-input"
+          />
+          <label for="marcaTrovet" class="form-check-label">Trovet Plus</label><br />
+          <input
+            type="checkbox"
+            id="marcaOutras"
+            name="marcas"
+            value="outras"
+            class="form-check-input"
+            onchange="verificarVendasCheckbox()"
+          />
+          <label for="marcaOutras" class="form-check-label">Outras</label>
+        </div>
+        <div id="outrasContainer" class="mt-2" style="display: none">
+          <input
+            type="text"
+            id="outrasDetalhes"
+            class="form-control"
+            placeholder="Especifica outras marcas"
+          />
+        </div>
+      </div>
+      <!-- Outros campos -->
+      <div class="mb-3">
+        <label for="interesse" class="form-label">Interesse Demonstrado:</label>
+        <select id="interesse" class="form-select">
+          <option value="">Seleciona uma opção</option>
+          <option value="Farma">Farma</option>
+          <option value="Mongevet">Monge VetSolution</option>
+          <option value="Mongefisio">Monge Fisiológica</option>
+          <option value="Gemon">Gemon</option>
+          <option value="Paw Spot">Paw Spot</option>       
+          <option value="Petuga">Petuga</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="estadocliente" class="form-label">Estado do Cliente:</label>
+        <select id="estadocliente" class="form-select">
+          <option value="">Seleciona uma opção</option>
+          <option value="Prospect">Prospect</option>
+          <option value="semcompras">Aberto sem compras</option>
+          <option value="activo">Activo</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="potencial" class="form-label">Potencial de Compras:</label>
+        <select id="potencial" class="form-select">
+          <option value="">Seleciona uma opção</option>
+          <option value="Baixo">Baixo</option>
+          <option value="medio">Médio</option>
+          <option value="alto">Alto</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="objecoes" class="form-label">Objeccões:</label>
+        <input
+          type="text"
+          id="objecoes"
+          class="form-control"
+          placeholder="Objecções"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="observacoes" class="form-label">Outras observações:</label>
+        <textarea
+          id="observacoes"
+          class="form-control"
+          placeholder="Outras observações"
+        ></textarea>
+      </div>
+      <!-- Botão para gerar, salvar e confirmar -->
+      <button
+        type="button"
+        class="btn btn-primary"
+        onclick="processarDescricao()"
+      >
+        Gerar e Salvar Descrição
+      </button>
+    </form>
+    <!-- Área para exibir a descrição gerada -->
+    <div class="mt-4">
+      <h2>Descrição gerada:</h2>
+      <textarea
+        id="resultado"
+        rows="10"
+        class="form-control"
+        readonly
+      ></textarea>
+    </div>
+    <!-- Bootstrap JS Bundle (inclui Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Scripts JS -->
+    <script>
+      function verificarPerfil() {
+        var perfil = document.getElementById("tipocliente").value;
+        var container = document.getElementById("licencaContainer");
+        if (perfil === "PetShop" || perfil === "Agro") {
+          container.style.display = "block";
+        } else {
+          container.style.display = "none";
+          document.getElementById("licenca").value = "";
+          document.getElementById("textoLicenca").style.display = "none";
+          document.getElementById("textoLicenca").value = "";
+        }
+      }
+      function verificarLicenca() {
+        var licenca = document.getElementById("licenca").value;
+        var inputLicenca = document.getElementById("textoLicenca");
+        if (licenca === "sim") {
+          inputLicenca.style.display = "block";
+        } else {
+          inputLicenca.style.display = "none";
+          inputLicenca.value = "";
+        }
+      }
+      function verificarFornecedoresCheckbox() {
+        var outros = document.getElementById("fornecedorOutros").checked;
+        var container = document.getElementById("fornecedoresOutrosContainer");
+        if (outros) {
+          container.style.display = "block";
+        } else {
+          container.style.display = "none";
+          document.getElementById("fornecedoresOutrosDetalhes").value = "";
+        }
+      }
+      function verificarVendasCheckbox() {
+        var outras = document.getElementById("marcaOutras").checked;
+        var container = document.getElementById("outrasContainer");
+        if (outras) {
+          container.style.display = "block";
+        } else {
+          container.style.display = "none";
+          document.getElementById("outrasDetalhes").value = "";
+        }
+      }
+      function processarDescricao() {
+        var descricao = "";
+        descricao += "📌 Cliente: " + document.getElementById("cliente").value + "\n";
+        descricao += "👩‍⚕️ Pessoa de Contacto: " + document.getElementById("contacto").value + "\n";
+        descricao += "🌍 Perfil de clientes: " + document.getElementById("tipocliente").value + "\n";
+        var licenca = document.getElementById("licenca").value;
+        var licencaDetalhes = document.getElementById("textoLicenca").value;
+        if (licenca === "sim") {
+          descricao += "🔑 Licença DGAV: Sim";
+          if (licencaDetalhes.trim() !== "") {
+            descricao += " (" + licencaDetalhes + ")";
+          }
+          descricao += "\n";
+        } else if (licenca === "nao") {
+          descricao += "🔑 Licença DGAV: Não\n";
+        } else {
+          descricao += "🔑 Licença DGAV: Não especificada\n";
+        }
+        var marcas = document.getElementsByName("marcas");
+        var marcasSelecionadas = [];
+        for (var i = 0; i < marcas.length; i++) {
+          if (marcas[i].checked) {
+            marcasSelecionadas.push(marcas[i].value);
+          }
+        }
+        if (marcasSelecionadas.includes("outras")) {
+          var outrasDetalhes = document.getElementById("outrasDetalhes").value;
+          marcasSelecionadas[marcasSelecionadas.indexOf("outras")] = "Outras: " + outrasDetalhes;
+        }
+        descricao += "📦 Marcas atuais: " + marcasSelecionadas.join(", ") + "\n";
+        var fornecedores = document.getElementsByName("fornecedor");
+        var fornecedoresSelecionados = [];
+        for (var j = 0; j < fornecedores.length; j++) {
+          if (fornecedores[j].checked) {
+            fornecedoresSelecionados.push(fornecedores[j].value);
+          }
+        }
+        if (fornecedoresSelecionados.includes("outros")) {
+          var outrosFornecedoresDetalhes = document.getElementById("fornecedoresOutrosDetalhes").value;
+          fornecedoresSelecionados[fornecedoresSelecionados.indexOf("outros")] = "Outros: " + outrosFornecedoresDetalhes;
+        }
+        descricao += "📋 Fornecedores: " + fornecedoresSelecionados.join(", ") + "\n";
+        descricao += "🐾 Interesse demonstrado: " + document.getElementById("interesse").value + "\n";
+        descricao += "❌ Objecões: " + document.getElementById("objecoes").value + "\n";
+        descricao += "📑 Estado do cliente: " + document.getElementById("estadocliente").value + "\n";
+        descricao += "🚚 Potencial de compra: " + document.getElementById("potencial").value + "\n";
+        descricao += "📝 Outras observações: " + document.getElementById("observacoes").value;
+        document.getElementById("resultado").value = descricao;
+        if (confirm("Confirma que queres avançar para o download do ficheiro? Isto vai apagar os campos.")) {
+          downloadDescricao(descricao);
+          resetFields();
+        }
+      }
+      function downloadDescricao(text) {
+        var cliente = document.getElementById("cliente").value.trim();
+        if (!cliente) { cliente = "descricao"; }
+        var filename = cliente + ".txt";
+        var blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+        var url = window.URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      }
+      function resetFields() {
+        document.getElementById("cliente").value = "";
+        document.getElementById("contacto").value = "";
+        document.getElementById("tipocliente").value = "";
+        document.getElementById("licenca").value = "";
+        document.getElementById("textoLicenca").value = "";
+        document.getElementById("textoLicenca").style.display = "none";
+        document.getElementById("licencaContainer").style.display = "none";
+        var fornecedores = document.getElementsByName("fornecedor");
+        for (var i = 0; i < fornecedores.length; i++) {
+          fornecedores[i].checked = false;
+        }
+        document.getElementById("fornecedoresOutrosDetalhes").value = "";
+        document.getElementById("fornecedoresOutrosContainer").style.display = "none";
+        var marcas = document.getElementsByName("marcas");
+        for (var j = 0; j < marcas.length; j++) {
+          marcas[j].checked = false;
+        }
+        document.getElementById("outrasDetalhes").value = "";
+        document.getElementById("outrasContainer").style.display = "none";
+        document.getElementById("interesse").value = "";
+        document.getElementById("estadocliente").value = "";
+        document.getElementById("potencial").value = "";
+        document.getElementById("objecoes").value = "";
+        document.getElementById("observacoes").value = "";
+      }
+    </script>
+  </body>
+</html>
